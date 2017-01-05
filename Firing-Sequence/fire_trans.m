@@ -21,7 +21,7 @@ if and(PN.Enabled_Transitions(t1),...  % enabled & not currently firing
      PN.Firing_Transitions(t1) = 1;  %          
      % token removals and computing deposits                    
      [delta_X,output_place,inherited_color,inherited_costs,...
-        inherited_cont_var,inherited_part_No_set] = ...
+        inherited_cont_var,inherited_part_No] = ...
          consume_tokens(t1, selected_tokens); 
             
      % assign any resources reserved by t1
@@ -42,12 +42,23 @@ if and(PN.Enabled_Transitions(t1),...  % enabled & not currently firing
      end;
      if ischar(colorset), colorset = {colorset}; end;
 
-     part_No_set = union(new_part_No,inherited_part_No_set);
-
      new_event_in_Q.add_color = colorset;
-     new_event_in_Q.add_cont_var = inherited_cont_var;
      new_event_in_Q.add_cost  = output_token_cost;
-     new_event_in_Q.add_part_No = part_No_set;
+     new_event_in_Q.add_cont_var = inherited_cont_var;
+     if isempty(new_part_No),
+         zero_No = find([inherited_part_No{:}] == '0');
+         if zero_No,
+            inherited_part_No{zero_No} = {};                    
+            inherited_part_No = inherited_part_No(~cellfun(@isempty, inherited_part_No));
+            new_event_in_Q.add_part_No = inherited_part_No;
+        else
+            new_event_in_Q.add_part_No = inherited_part_No; % union(new_part_No,inherited_part_No);
+         end;                
+     else
+         new_event_in_Q.add_part_No = new_part_No;
+     end;
+     new_event_in_Q.split = split;
+
      EIP = add_to_events_queue(new_event_in_Q, EIP); % add to Queue         
 
  else % if firing conditions are NOT satisified 

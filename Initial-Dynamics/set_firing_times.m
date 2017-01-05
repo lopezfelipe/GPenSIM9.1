@@ -34,10 +34,10 @@ for i = 1:no_of_fts,
     PN.global_transitions(trans_nr).firing_time = ft;  
     
     if ischar (ft),  %firing time is a string; e.g. 'unifrnd(1,1)', 
-        PN.Set_of_Firing_Times(trans_nr) = NaN;
-    elseif eq(length(ft), 3),  %firing time is vector [hh mm ss]
+        PN.Set_of_Firing_Times(trans_nr) = NaN;        
+    elseif eq(length(ft), 4),  %firing time is vector [hh mm ss ms]
         PN.HH_MM_SS = 1; % set Hour-Min-Sec flag
-        ft2 = ft(3) + (60 * ft(2)) + (60 * 60 * ft(1)); % convert to seconds
+        ft2 = ft(3) + ft(4)/1000 + (60 * ft(2)) + (60 * 60 * ft(1)); % convert to seconds
         PN.global_transitions(trans_nr).firing_time = ft2;  % overrride
         PN.Set_of_Firing_Times(trans_nr) = ft2;
     else   % firing time is in time units (perhaps, seconds)

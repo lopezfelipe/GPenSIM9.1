@@ -5,7 +5,8 @@ function [time_string] = string_HH_MM_SS(timex)
 hour = floor(timex/3600);
 rest = mod(timex, 3600);
 minute = floor(rest/60);
-second = mod(rest, 60);
+second = floor(mod(rest, 60));
+millisecond = floor( mod(rest,1) * 1000);
 
 hour_str = num2str(hour);
 if lt(hour, 10),
@@ -22,7 +23,14 @@ if lt(second, 10),
     sec_str = ['0', sec_str];
 end;
 
-time_string = [hour_str,':', min_str, ':', sec_str];
+ms_str = num2str(millisecond);
+if lt(millisecond, 10),
+    ms_str = ['00',ms_str];
+elseif ge(millisecond, 10) && lt(millisecond, 100),
+    ms_str = ['0', ms_str];
+end;
+
+time_string = [hour_str,':', min_str, ':', sec_str, '.', ms_str];
 
 
 

@@ -80,6 +80,20 @@ while ~(SIM_COMPLETE),
     number_of_completions = 0; %for start, assume no completion this time 
     EIP_not_empty = ~isempty(EIP);
     
+    if isfield(global_info, 'COMPARE')
+        if ( global_info.COMPARE ),
+            if (Loop_Nr == 1),
+                SimPLCinputs = global_info.PLCinputs;
+                SimPLCcoils = global_info.PLCcoils;
+                SimPLCtime = PN.current_time;
+            else
+                SimPLCinputs = [SimPLCinputs; global_info.PLCinputs];
+                SimPLCcoils = [SimPLCcoils; global_info.PLCcoils];
+                SimPLCtime = [SimPLCtime; PN.current_time];
+            end;
+        end;
+    end;
+    
     if (EIP_not_empty),
         %NGT: *************************************************************        
         [LOG, colormap, EIP, number_of_completions] = ...

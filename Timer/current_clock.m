@@ -5,17 +5,19 @@ function [current_clock_HMS] = current_clock(secs_or_HHMMSS)
 %
 %       Reggie Davidrajuh (c) August 2011
 
-current_clock = fix(clock); % time in [YY MM DD hh mm ss] 
-hour = current_clock(4);
-min = current_clock(5);
-sec = current_clock(6);
+current_clock = clock; % time in [YY MM DD hh mm ss] 
+fixed_clock = fix(current_clock);
+ms = fix( 1000*(current_clock(6)-fixed_clock(6)) );
+sec = fixed_clock(6);
+min = fixed_clock(5);
+hour = fixed_clock(4);
 
 if eq(secs_or_HHMMSS, 1),
     % convert to seconds
-    current_clock_HMS = sec + (60 * min) + (60 * 60 * hour); 
+    current_clock_HMS = sec + ms/1000 + (60 * min) + (60 * 60 * hour); 
 elseif eq(secs_or_HHMMSS, 3),
-    % convert to [hour min sec]
-    current_clock_HMS = [hour min sec]; 
+    % convert to [hour min sec ms]
+    current_clock_HMS = [hour min sec ms]; 
 else
     error('input argument must be either 1 or 3');
 end;

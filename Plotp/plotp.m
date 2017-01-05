@@ -24,6 +24,8 @@ PN = sim_results;
 TOKEN_MATRIX = extractp(set_of_places);
 [nr_rows, nr_columns] = size(TOKEN_MATRIX);
 
+today = clock;
+
 time_series = TOKEN_MATRIX(2:nr_rows,1); %skip place indice
 TOKENS = TOKEN_MATRIX(2:nr_rows,2:nr_columns); %ONLY TOKENS
 
