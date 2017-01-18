@@ -110,6 +110,15 @@ end; %while ~(SIM_COMPLETE)
 
 % Finally, pack results
 pack_sim_results(Enabled_Trans_SET, Firing_Trans_SET, LOG, colormap, LOG_CONT);
+% Pack PLC predictions
+if isfield(global_info, 'COMPARE')
+    if ( global_info.COMPARE ),
+        PLCprediction.time = SimPLCtime;
+        PLCprediction.inputs = SimPLCinputs;
+        PLCprediction.coils = SimPLCcoils;
+        PN.PLCprediction = PLCprediction;
+    end;
+end;
 
 % finally, run the simulation
 sim_results = PN;
